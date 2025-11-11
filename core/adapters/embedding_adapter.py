@@ -118,11 +118,12 @@ class RemoteEmbeddingAdapter(EmbeddingAdapter):
         self.retry_delay = retry_delay
         self.timeout = timeout or self.settings.ollama_timeout
         # Use separate connect and read timeouts for better network handling
+        # Increased timeouts for slow/remote Ollama servers
         timeout_config = httpx.Timeout(
-            connect=30.0,  # 30 seconds to establish connection
+            connect=120.0,  # 120 seconds to establish connection (for slow servers)
             read=self.timeout,  # Full timeout for reading response
-            write=30.0,  # 30 seconds to write request
-            pool=30.0  # 30 seconds to get connection from pool
+            write=60.0,  # 60 seconds to write request
+            pool=60.0  # 60 seconds to get connection from pool
         )
         self.client = httpx.Client(timeout=timeout_config)
     
@@ -139,10 +140,11 @@ class RemoteEmbeddingAdapter(EmbeddingAdapter):
         Raises:
             Exception: If all retry attempts fail
         """
-        # Parallelize with limited workers to speed up large uploads
+        # Parallelize with limited workers to avoid overwhelming Ollama
         from concurrent.futures import ThreadPoolExecutor, as_completed
 
-        max_workers = min(8, max(2, len(texts)//8 or 2))
+        # Reduce parallelism for slow/remote Ollama servers to avoid timeouts
+        max_workers = min(3, max(1, len(texts)//10 or 1))
         results = [None] * len(texts)
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             future_to_idx = {executor.submit(self._embed_with_retry, t): i for i, t in enumerate(texts)}
