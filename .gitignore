@@ -1,0 +1,70 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment variables
+.env
+.env.local
+.env.docker
+
+# Data files
+data/uploads/*
+data/chunks/*
+data/temp/*
+!data/uploads/.gitkeep
+!data/chunks/.gitkeep
+!data/temp/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit files (keep locally, don't upload to Github or Docker)
+frontend/
+app/Main.py
+app/*.py
+
+# Node.js / Frontend
+web/node_modules/
+web/dist/
+web/.env
+web/.env.local
+web/.env.production
+
+# Docker
+.dockerignore

@@ -1,0 +1,13 @@
+streamlit
+fastapi
+uvicorn
+python-dotenv
+pydantic
+pydantic-settings
+qdrant-client
+requests
+numpy
+python-multipart
+pypdf2
+python-docx
+
