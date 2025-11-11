@@ -30,10 +30,14 @@ async def verify_token(
     
     try:
         # Verify token by calling Supabase auth endpoint
+        # Note: Supabase requires both Authorization and apikey headers
         async with httpx.AsyncClient() as client:
             response = await client.get(
                 f"{SUPABASE_URL}/auth/v1/user",
-                headers={"Authorization": f"Bearer {token}"},
+                headers={
+                    "Authorization": f"Bearer {token}",
+                    "apikey": SUPABASE_SERVICE_ROLE if SUPABASE_SERVICE_ROLE else token,
+                },
                 timeout=5.0,
             )
             
