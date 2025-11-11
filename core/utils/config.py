@@ -22,7 +22,8 @@ class Settings(BaseSettings):
     qdrant_url: str = Field(default="http://47.129.127.169:6333", description="Qdrant server URL")
     
     # Ollama Configuration
-    ollama_url: str = Field(default="http://47.129.127.169:11434", description="Ollama server URL")
+    ollama_url: str = Field(default="http://47.129.127.169:11434", description="Ollama server URL", env="OLLAMA_URL")
+    ollama_base_url: str = Field(default="", description="Ollama base URL (alias for ollama_url)", env="OLLAMA_BASE_URL")
     
     # Model Configuration
     embed_model: str = Field(default="nomic-embed-text", description="Embedding model name")
