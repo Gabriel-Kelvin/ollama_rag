@@ -537,11 +537,28 @@ async def create_knowledge_base(request: CreateKBRequest, user: dict = Depends(v
     """Create a new knowledge base."""
     logger.info(f"📚 Creating knowledge base: {request.name} for user {user.get('email')}")
     try:
-        vector_store.ensure_kb(request.name)
+        # Try to create KB in vector store, but handle timeout gracefully
+        try:
+            vector_store.ensure_kb(request.name)
+        except Exception as vs_error:
+            error_msg = str(vs_error)
+            if "timeout" in error_msg.lower() or "timed out" in error_msg.lower():
+                logger.warning(f"Vector store timeout creating KB {request.name}, but KB will be created on first document upload")
+                # Return success anyway - KB will be created when first document is uploaded
+            else:
+                raise
+        
+        # Create directory structure even if vector store failed
+        from pathlib import Path
+        kb_dir = Path("data/uploads") / request.name
+        kb_dir.mkdir(parents=True, exist_ok=True)
+        
         return {
             "message": f"Knowledge base '{request.name}' created successfully",
             "kb_name": request.name
         }
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Error creating knowledge base: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
