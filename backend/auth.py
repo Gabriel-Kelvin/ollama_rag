@@ -11,6 +11,7 @@ security = HTTPBearer()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SERVICE_ROLE = os.getenv("SUPABASE_SERVICE_ROLE", "")
+SUPABASE_ANON_KEY = os.getenv("SUPABASE_ANON_KEY", "")
 
 
 async def verify_token(
@@ -36,7 +37,7 @@ async def verify_token(
                 f"{SUPABASE_URL}/auth/v1/user",
                 headers={
                     "Authorization": f"Bearer {token}",
-                    "apikey": SUPABASE_SERVICE_ROLE if SUPABASE_SERVICE_ROLE else token,
+                    "apikey": SUPABASE_ANON_KEY if SUPABASE_ANON_KEY else SUPABASE_SERVICE_ROLE,
                 },
                 timeout=5.0,
             )
