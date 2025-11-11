@@ -68,3 +68,7 @@ web/.env.production
 
 # Docker
 .dockerignore
+
+# Allow frontend lib folder to be tracked
+!web/src/lib/
+!web/src/lib/**
