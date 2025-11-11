@@ -336,8 +336,13 @@ async def list_knowledge_bases(user: dict = Depends(verify_token)):
     try:
         from core.utils.file_utils import list_kb_files
         
-        # Get all collections from vector store
-        kb_list = vector_store.list_kbs()
+        # Get all collections from vector store with timeout handling
+        try:
+            kb_list = vector_store.list_kbs()
+        except Exception as vs_error:
+            logger.warning(f"Vector store error (returning empty list): {str(vs_error)}")
+            # Return empty list if vector store is unavailable
+            return []
         
         # Don't auto-create default KB - let users start with empty list
         # Users can create their own KBs as needed
@@ -349,7 +354,8 @@ async def list_knowledge_bases(user: dict = Depends(verify_token)):
                 # Count actual files in the KB
                 files = list_kb_files(kb_name)
                 doc_count = len(files)
-            except:
+            except Exception as file_error:
+                logger.warning(f"Error counting files for {kb_name}: {str(file_error)}")
                 doc_count = 0
             
             kbs.append({
