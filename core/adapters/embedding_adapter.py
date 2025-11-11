@@ -117,7 +117,14 @@ class RemoteEmbeddingAdapter(EmbeddingAdapter):
         self.max_retries = max_retries
         self.retry_delay = retry_delay
         self.timeout = timeout or self.settings.ollama_timeout
-        self.client = httpx.Client(timeout=self.timeout)
+        # Use separate connect and read timeouts for better network handling
+        timeout_config = httpx.Timeout(
+            connect=30.0,  # 30 seconds to establish connection
+            read=self.timeout,  # Full timeout for reading response
+            write=30.0,  # 30 seconds to write request
+            pool=30.0  # 30 seconds to get connection from pool
+        )
+        self.client = httpx.Client(timeout=timeout_config)
     
     def embed(self, texts: List[str]) -> List[List[float]]:
         """
