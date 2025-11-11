@@ -59,6 +59,10 @@ class Settings(BaseSettings):
     
     def model_post_init(self, __context):
         """Post-initialization hook to validate URLs and log warnings."""
+        # Use OLLAMA_BASE_URL if provided, otherwise use OLLAMA_URL
+        if self.ollama_base_url:
+            self.ollama_url = self.ollama_base_url
+        
         # Check and warn if localhost is used
         if "localhost" in self.qdrant_url.lower() or "127.0.0.1" in self.qdrant_url:
             logger.warning(
