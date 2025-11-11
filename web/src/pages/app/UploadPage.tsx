@@ -102,11 +102,17 @@ export const UploadPage: React.FC = () => {
 
     setUploading(true);
     try {
-      await api.uploadFile(selectedKb, file);
-      toast.success(`${file.name} uploaded successfully`);
+      const response = await api.uploadFile(selectedKb, file, (progress) => {
+        // Show upload progress
+        if (progress < 100) {
+          toast.info(`Uploading ${file.name}: ${progress}%`, { autoClose: 1000 });
+        }
+      });
+      toast.success(`${file.name} uploaded and indexed successfully!`, { autoClose: 5000 });
       fetchFiles();
-    } catch (error) {
-      toast.error(`Failed to upload ${file.name}`);
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.detail || `Failed to upload ${file.name}`;
+      toast.error(errorMsg);
     } finally {
       setUploading(false);
     }
@@ -152,7 +158,7 @@ export const UploadPage: React.FC = () => {
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
         <h1 className="text-3xl font-bold text-gray-100">Upload Documents</h1>
-        <p className="text-gray-400 mt-1">Add files to your knowledge base</p>
+        <p className="text-gray-400 mt-1">Upload files to your knowledge base - indexing happens automatically</p>
       </div>
 
       <Card>
@@ -203,6 +209,7 @@ export const UploadPage: React.FC = () => {
                 Browse Files
               </Button>
               <p className="text-xs text-gray-500 mt-4">Supports PDF, DOC, DOCX, TXT</p>
+              <p className="text-xs text-primary mt-2">✨ Files are automatically indexed on upload</p>
             </label>
           </form>
         </CardContent>

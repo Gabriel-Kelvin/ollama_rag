@@ -109,7 +109,7 @@ export const ChatPage: React.FC = () => {
     return (
       <div className="max-w-4xl mx-auto">
         <Alert variant="warning" title="No Knowledge Bases">
-          <p>Please create a knowledge base and index documents first.</p>
+          <p>Please create a knowledge base and upload documents first.</p>
         </Alert>
       </div>
     );

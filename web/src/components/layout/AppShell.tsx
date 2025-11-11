@@ -4,7 +4,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import {
   Database,
   Upload,
-  FileSearch,
   MessageSquare,
   Settings,
   LogOut,
@@ -26,7 +25,6 @@ interface NavItem {
 const navItems: NavItem[] = [
   { name: 'Knowledge Bases', path: '/app/kb', icon: Database },
   { name: 'Upload', path: '/app/upload', icon: Upload },
-  { name: 'Index', path: '/app/index', icon: FileSearch },
   { name: 'Chat', path: '/app/chat', icon: MessageSquare },
   { name: 'Settings', path: '/app/settings', icon: Settings },
 ];

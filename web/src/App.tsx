@@ -14,7 +14,6 @@ import { CallbackPage } from './pages/auth/CallbackPage';
 // App pages
 import { KnowledgeBasesPage } from './pages/app/KnowledgeBasesPage';
 import { UploadPage } from './pages/app/UploadPage';
-import { IndexPage } from './pages/app/IndexPage';
 import { ChatPage } from './pages/app/ChatPage';
 import { SettingsPage } from './pages/app/SettingsPage';
 
@@ -46,7 +45,6 @@ const App: React.FC = () => {
                   <Routes>
                     <Route path="kb" element={<KnowledgeBasesPage />} />
                     <Route path="upload" element={<UploadPage />} />
-                    <Route path="index" element={<IndexPage />} />
                     <Route path="chat" element={<ChatPage />} />
                     <Route path="settings" element={<SettingsPage />} />
                     <Route path="*" element={<Navigate to="/app/kb" replace />} />
